@@ -1,0 +1,95 @@
+{% extends "auctions/layout.html" %}
+{% block style%} 
+<style type="text/css">
+img{
+
+	
+}
+div.parent{ 
+    border:solid lightblue 2px;
+    display:table;
+    padding:5px; 
+    width:100%;
+    height: 300px;
+    margin:5px 0; /* you can change/remove margin */
+}
+div.text{ 
+    vertical-align:middle;
+    display:table-cell;
+    text-align:left;
+}
+div.parent .img{
+    vertical-align:middle;
+    display:table-cell;
+    padding-right:5px;
+    width:400px; /* you can change width */
+}
+div.img img{ 
+    height: 200px;
+	width: 200px;
+    vertical-align:middle;
+}
+
+</style>
+
+
+{% endblock %}
+
+{% block body %}
+    <h2> {{category}} </h2>
+    <ul style="list-style-type:none;">
+    	{% for auction in auctions %}
+        {% if auction.is_active %}
+
+    	<div class="parent">
+            <div class="img">
+            	{% if auction.image_url %}
+            	<img src="{{ auction.image_url }}">
+                {% else %}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png">
+                {% endif %}
+            </div>
+                
+                
+            <div class="text">
+            	<a href="{% url 'show_list' auction.id %}"><h1> {{ auction.title}} </h1> </a>
+            	<br>
+            	<h6> Starting Bid: {{auction.starting_price}}</h6>
+                <h6> Existing Bid: {{ auction.auction_listing.last.amount }}</h6>
+                {% if auction.is_active != True %}
+                <p style="color:red;"> AUCTION IS CLOSED
+
+                </p>
+        {% endif %}
+                <br>
+                {{ auction.description}}
+            </div>
+        </div>
+
+        {% endif %}
+        {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    	
+    </ul>
+
+  
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "auctions/layout.html" %}
+{% block style%}
+<style type="text/css">
+  img{
+    height: 500px;
+    width: 500px;
+  }
+  button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  position: fixed;
+  right: 30px;
+}
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  resize: none;
+}
+</style>
+
+ {% endblock %}
+
+
+  {% block body %}
+      <h1> Listing: {{auction.title }}</h1>
+
+
+      {% if auction.is_active %}
+      
+
+          {% if close %}
+          <form method="post" action="{% url 'index' %}">
+          {% csrf_token %}
+          <button type="submit" name="id" value="{{auction.id}}">Close</button>
+          </form>
+          {% endif %}
+
+                 
+          
+             <form action="{% url 'Watchlist' %}" method="post" style="position: absolute; right: 30px;">
+               {% csrf_token %}
+               <input type="hidden" name="id" value="{{auction.id}}">
+                    {% if in_watchlist %}
+                    <input type="hidden" name="remove" value="remove">
+                    <input type="submit" value="Remove from Watchlist">
+               
+                    {% else %}
+                    <input type="submit" value="ADD TO Watchlist">
+                    
+                    {% endif %}
+             </form>
+                
+               
+
+        
+      {% else %}
+             <div class="alert alert-info" role="alert">
+               Auction is Won by {{bid.user.username}}
+             </div>
+
+      {% endif %}
+
+
+       {% if auction.image_url %}
+      <img src="{{ auction.image_url }}">
+
+      {% else %}
+      <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482930.jpg">
+
+
+      {% endif %}
+      <br>
+      <p> {{ auction.description }}</p>
+      <br>
+      <b> $ {{ bid.amount }} </b>
+      Maximum bid by {{Max_bidby}}
+
+      {% if auction.is_active %}
+
+
+      <form action="{% url 'show_list' auction.id %}" method="post">
+      	{% csrf_token %}
+      	<label> BID: </label>
+      	<input type="number" name="bid" placeholder="Bidding Amount" min = {{ bid.amount }}>
+      	<br>
+      	<input type="submit" value="Place bid" style="background-color: lightblue;">
+      </form>
+
+      {% endif %}
+
+      <br><br>
+
+      <p>
+      Details:
+      <br>
+
+      Listed by: {{Auction_madeby}}
+      <br>
+      Category: {{auction.category}}
+
+  </p>
+  {% if user.is_authenticated %}
+
+  <h2> Comments </h2>
+  <form action="{% url 'show_list' auction.id %}" method="post">
+    {% csrf_token %}
+  <textarea name="text"> </textarea>
+  <input type="submit" value="ADD COMMENT">
+  </form>
+
+  <br>
+
+  {% endif %}
+
+ {% for comment in comments %}
+
+
+  <div class="card">
+  <div class="card-header" style="background-color: lightblue;">
+    User: {{comment.user.username}}
+    
+  </div>
+  <div class="card-body">
+    <p class="card-text">{{comment.text}}</p>
+    
+  </div>
+</div>
+<br>
+
+{%endfor%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {% endblock %}

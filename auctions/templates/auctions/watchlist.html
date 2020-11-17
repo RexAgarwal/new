@@ -1,0 +1,67 @@
+{% extends "auctions/layout.html" %}
+{% block style%} 
+<style type="text/css">
+img{
+
+  
+}
+div.parent{ 
+    border:solid lightblue 2px;
+    display:table;
+    padding:5px; 
+    width:100%;
+    height: 300px;
+    margin:5px 0; /* you can change/remove margin */
+}
+div.text{ 
+    vertical-align:middle;
+    display:table-cell;
+    text-align:left;
+}
+div.parent .img{
+    vertical-align:middle;
+    display:table-cell;
+    padding-right:5px;
+    width:400px; /* you can change width */
+}
+div.img img{ 
+    height: 200px;
+  width: 200px;
+    vertical-align:middle;
+}
+
+</style>
+
+
+{% endblock %}
+
+
+  {% block body %}
+
+  <h2> Watchlist for {{ request.user.username }} </h2>
+    <ul style="list-style-type:none;">
+      {% for watchlist in watchlists %}
+
+      <div class="parent">
+            <div class="img">
+              {% if watchlist.item.image_url %}
+              <img src="{{ watchlist.item.image_url }}"/>
+
+      
+            </div>
+              {% endif %}
+            <div class="text">
+              <a href="{% url 'show_list' watchlist.item.id %}"><h1> {{ watchlist.item.title}} </h1> </a>
+              <br>
+              <h6>  Starting Bid: {{watchlist.item.starting_price}} </h6>
+              <h6> Existing Bid: {{ auction.auction_listing.last.amount }}</h6>
+                {{ watchlist.item.description}}
+            </div>
+        </div>
+        {% endfor %}
+
+
+
+
+
+  {% endblock %}
